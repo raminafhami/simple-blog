@@ -1,12 +1,22 @@
 <template>
-  <div class="home">
-    <h1 class="text-center mb-5">Home</h1>
-    <article v-for="article in articles">
-      <h3><router-link :to="`/article/${article.slug}`">{{article.title}}</router-link></h3>
-      <div>{{article.des}} <router-link :to="`/article/${article.slug}`">+ more</router-link></div>
-      <hr>
-    </article>
-  </div>
+    <div class="add">
+        <form @submit.prevent="doAdd">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" class="form-control" id="title" placeholder="title" v-model="title">
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control" id="description" rows="3"  v-model="des"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="content">content</label>
+                <textarea class="form-control" id="content" rows="8"  v-model="content"></textarea>
+            </div>
+            <button class="btn btn-primary">Add article</button>
+        </form>
+    </div>
 </template>
 
 <script>
@@ -14,6 +24,9 @@ export default {
   name: 'Home',
   data() {
     return {
+        title: "",
+        des: "",
+        content: "",
       articles: [
         {
           title: "title 1",
@@ -87,6 +100,19 @@ export default {
         }
       ]
     }
+  },
+  methods: {
+      doAdd() {
+          this.articles.push({
+              title: this.title,
+              content: this.content,
+              description: this.des,
+              slug: this.title.replaceAll(" ", "-").toLowerCase()
+          });
+
+          console.log(this.slug);
+          this.$router.push(`/article/${this.articles[this.articles.length - 1].slug}`)
+      }
   }
 }
 </script>
